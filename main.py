@@ -1,15 +1,17 @@
-import os
 import time
+import datetime
+
 import cv2
 import numpy as np
-from PIL.Image import Image
 from mss import mss
 from pytesseract import pytesseract
 
 stats = dict()
 
 
-def print_stats():
+def format_stats():
+    for speaker in stats:
+        stats[speaker] = str(datetime.timedelta(seconds=stats[speaker]))
     print(stats)
 
 
@@ -59,10 +61,11 @@ def get_speaker_name(image):
 
 
 def add_speaker_to_stat(speaker_name):
-    if speaker_name in stats:
-        stats[speaker_name] += 1
-    else:
-        stats[speaker_name] = 1
+    if speaker_name:
+        if speaker_name in stats:
+            stats[speaker_name] += 1
+        else:
+            stats[speaker_name] = 1
 
 
 def process(processed_image):
@@ -95,7 +98,7 @@ if __name__ == '__main__':
             startTime = time.time()
         if cv2.waitKey(1) & 0xFF == ord('q'):
             cv2.destroyAllWindows()
-            print_stats()
+            format_stats()
             break
 
 # $ sudo apt install tesseract-ocr
