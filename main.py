@@ -118,6 +118,3 @@ async def start_loop():
 
 if __name__ == '__main__':
     asyncio.run(start_loop())
-
-
-# $ sudo apt install tesseract-ocr
