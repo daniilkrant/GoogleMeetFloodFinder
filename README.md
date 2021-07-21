@@ -9,7 +9,9 @@ OpenCV to find an active speaker and Tesseract to OCR his name.
 During meeting and after meeting close it will show you a detailed statistic.
 <br/>
 
-###### **Libs**
+**Libs**
+<br/>
+
 App uses OCR to get information about current speaker, so you need to install it:
 <br/>
 `# $ sudo apt install tesseract-ocr`
