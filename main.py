@@ -25,7 +25,7 @@ def get_next_image():
         screenshot = np.array(sct.grab(monitor))
         screenshot = cv2.cvtColor(screenshot, cv2.COLOR_RGB2RGBA)
         return screenshot
-    # return cv2.imread(os.path.join(os.path.dirname(os.path.realpath(__file__)), 'files/screenshot_eng.jpg'))
+    # return cv2.imread(os.path.join(os.path.dirname(os.path.realpath(__file__)), 'test_files/screenshot_eng.jpg'))
 
 
 def find_speaker_contour(image_to_process):
@@ -54,7 +54,7 @@ def prepare_for_ocr(active_user_image):
 
 
 def get_speaker_name(image):
-    custom_config = r'--oem 3 --psm 6'
+    custom_config = r'--oem 3 --psm 7'
     res = pytesseract.image_to_string(image, config=custom_config).strip()
     print(f"Recognized as speaker: {res}")
     return res
