@@ -46,16 +46,37 @@ def get_next_image():
     with mss() as sct:
         monitor = sct.monitors[2]
         screenshot = np.array(sct.grab(monitor))
-        screenshot = cv2.cvtColor(screenshot, cv2.COLOR_BGR2GRAY)
         return screenshot
     # return cv2.imread(os.path.join(os.path.dirname(os.path.realpath(__file__)), 'test_files/screenshot_eng.jpg'))
 
 
+def get_colormask(frame, low_color, high_color):
+    hsv_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
+    color_mask = cv2.inRange(hsv_frame, low_color, high_color)
+    return color_mask
+
+
+def get_square_contour(grayscale):
+    blur = cv2.GaussianBlur(grayscale, (7, 7), 0)
+    threshed = cv2.threshold(blur, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)[1]
+    contours = cv2.findContours(threshed, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)[-2]
+    return contours
+
+
+def get_rectangle_contour(contours):
+    contours = sorted(contours, key=cv2.contourArea)
+    contour = contours[-1]
+    return contour
+
+
 def find_speaker_contour(image_to_process):
-    edged = cv2.Canny(image_to_process, 30, 200)
-    contours, _ = cv2.findContours(edged, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_NONE)
-    biggest_contour = max(contours, key=cv2.contourArea)
-    return biggest_contour
+    low_blue = np.array([100, 100, 90])
+    high_blue = np.array([120, 250, 255])
+
+    blue_border = get_colormask(image_to_process, low_blue, high_blue)
+    contours = get_square_contour(blue_border)
+    blue_rect_contour = get_rectangle_contour(contours)
+    return blue_rect_contour
 
 
 def crop_by_contour(contour, image_to_process):
@@ -69,6 +90,7 @@ def show(image_to_process, title):
 
 
 def prepare_for_ocr(active_user_image):
+    active_user_image = cv2.cvtColor(active_user_image, cv2.COLOR_BGR2GRAY)
     active_user_image = cv2.threshold(active_user_image, 150, 255, cv2.THRESH_BINARY_INV + cv2.THRESH_OTSU)[1]
     x, y, w, h = cv2.boundingRect(active_user_image)
     cropped = active_user_image[round(h * 0.8):h, round(w * 0.01):round(w * 0.5)]

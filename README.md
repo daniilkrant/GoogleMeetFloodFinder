@@ -1,22 +1,23 @@
-**_Google Meet Flood Finder_**\
-<br/>
-Sometimes it is pretty hard to detect who is talking too much on meetings.
-<br/>
 
-This application uses MSS to take a screenshot of Google Meet every second,
-OpenCV to find an active speaker and Tesseract to OCR his name.
-<br/>
-During meeting and after meeting close it will show you a detailed statistic.
-<br/>
+**DOCX Meld Compare**
 
-**Libs**
-<br/>
-
-App uses OCR to get information about current speaker, so you need to install it:
-<br/>
-`# $ sudo apt install tesseract-ocr`
-<br/>
-
-All Python libs can be installed by executing:
-<br/>
-`pip install -r requirements.txt`
+ - **Problem**
+&nbsp;
+Sometimes customers provide documentation using .docx files.
+It is very uncomfortable to manually find what exactly was changed.
+This script can make it easier.
+ - **Solution way**
+&nbsp;
+This script uses Pandoc to transform .docx to .md and Meld to compare changes.
+ - **Libs**
+&nbsp;
+Script will sugest you to install needed libraries automatically, however:
+Pandoc is using to transform .docx to .md, so you can to install it manually:
+`$ sudo apt install tesseract-ocr`
+Meld is using to compare changes:
+`$ sudo apt install meld`
+ - **Usage**
+``compare_docs.sh [-o <old_version.docx>] [-n <new_version.docx>]``
+   
+Screenshots:
+![Example](/screenshots/meld.png?raw=false "Example")
